@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NKZSoft.Gateway.API", "src\NKZSoft.Gateway.API\NKZSoft.Gateway.API.csproj", "{672D41F5-B4AB-4D97-BE95-A11A07E9F76B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CB01051F-8CDF-4846-A066-395DBC9750D5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{BEA74CB0-2304-4A0B-9983-31CB55BF0238}"
+	ProjectSection(SolutionItems) = preProject
+		deployment\.env = deployment\.env
+		deployment\docker-compose.yaml = deployment\docker-compose.yaml
+		deployment\env.example = deployment\env.example
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "keycloak", "keycloak", "{A00FCEFA-1706-46F8-9084-AF7B0C81F2C8}"
+	ProjectSection(SolutionItems) = preProject
+		deployment\keycloak\realm-test.json = deployment\keycloak\realm-test.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "postgres", "postgres", "{80447263-10C1-4598-AE79-55DFB2503480}"
+	ProjectSection(SolutionItems) = preProject
+		deployment\postgres\init.sql = deployment\postgres\init.sql
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NKZSoft.Data.API", "src\NKZSoft.Data.API\NKZSoft.Data.API.csproj", "{D0254B59-CC0E-41ED-A923-E3D9E7C8B665}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{672D41F5-B4AB-4D97-BE95-A11A07E9F76B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{672D41F5-B4AB-4D97-BE95-A11A07E9F76B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{672D41F5-B4AB-4D97-BE95-A11A07E9F76B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{672D41F5-B4AB-4D97-BE95-A11A07E9F76B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0254B59-CC0E-41ED-A923-E3D9E7C8B665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0254B59-CC0E-41ED-A923-E3D9E7C8B665}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0254B59-CC0E-41ED-A923-E3D9E7C8B665}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0254B59-CC0E-41ED-A923-E3D9E7C8B665}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{672D41F5-B4AB-4D97-BE95-A11A07E9F76B} = {CB01051F-8CDF-4846-A066-395DBC9750D5}
+		{A00FCEFA-1706-46F8-9084-AF7B0C81F2C8} = {BEA74CB0-2304-4A0B-9983-31CB55BF0238}
+		{80447263-10C1-4598-AE79-55DFB2503480} = {BEA74CB0-2304-4A0B-9983-31CB55BF0238}
+		{D0254B59-CC0E-41ED-A923-E3D9E7C8B665} = {CB01051F-8CDF-4846-A066-395DBC9750D5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B4CCFEA-313B-41F1-A770-2A08B6D72A79}
+	EndGlobalSection
+EndGlobal
