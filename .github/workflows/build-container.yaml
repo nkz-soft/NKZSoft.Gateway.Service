@@ -1,0 +1,56 @@
+name: build-container
+
+on:
+  push:
+    tags:
+    - '**'           # Push events to every tag including hierarchical tags like v1.0/beta
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - dockerfile: ./src/NKZSoft.Gateway.API/Dockerfile
+            image: ghcr.io/nkz-soft/gateway/gateway-service-api
+          - dockerfile: ./src/NKZSoft.Data.API/Dockerfile
+            image: ghcr.io/nkz-soft/gateway/data-service-api
+    timeout-minutes: 5
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore Dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build -c Release --no-restore
+    - name: Publish
+      run: |
+        dotnet publish ./src/NKZSoft.Gateway.API  -c Release -o ./publish/NKZSoft.Gateway.API --no-restore --no-build
+        dotnet publish ./src/NKZSoft.Data.API -c Release -o ./publish/NKZSoft.Data.API --no-restore --no-build
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ matrix.image }}
+    - name: Login to Github Packages
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build image and push to GitHub Container Registry
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: ${{ matrix.dockerfile }}
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+    - name: Drafts release notes
+      uses: release-drafter/release-drafter@v5
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
