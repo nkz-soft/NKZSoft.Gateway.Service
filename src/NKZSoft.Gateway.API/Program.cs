@@ -2,6 +2,13 @@ using NKZSoft.Gateway.API.Extensions;
 using OpenIdConnectConfiguration = NKZSoft.Gateway.API.Settings.OpenIdConnectConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddCommandLine(args)
+    .AddEnvironmentVariables()
+    .Build();
+
 var configuration = builder.Configuration;
 
 var openIdConnectConfiguration = configuration.GetSection(OpenIdConnectConfiguration.SectionName)
