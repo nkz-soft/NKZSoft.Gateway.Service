@@ -3,6 +3,6 @@ EXPOSE 80
 EXPOSE 81
 
 WORKDIR /app
-COPY . ./publish/app
+COPY . ./publish/NKZSoft.Gateway.API
 
-ENTRYPOINT ["dotnet", "NKZSoft.Template.Presentation.REST.dll"]
+ENTRYPOINT ["dotnet", "NKZSoft.Gateway.API.dll"]
