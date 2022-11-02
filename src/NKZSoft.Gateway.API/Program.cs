@@ -60,7 +60,7 @@ app.MapHealthChecks("/healthz");
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.UseGatewayEndpoints();
+    endpoints.UseGatewayEndpoints(openIdConnectConfiguration.RedirectUrl);
     endpoints.MapReverseProxy();
 });
 app.Run();

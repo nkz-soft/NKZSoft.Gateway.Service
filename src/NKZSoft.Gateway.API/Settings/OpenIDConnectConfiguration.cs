@@ -11,4 +11,6 @@ internal sealed record OpenIdConnectConfiguration
     public string? ClientSecret { get; set; }
 
     public string? MetadataAddress { get; set; }
+
+    public string? RedirectUrl { get; set; }
 }
