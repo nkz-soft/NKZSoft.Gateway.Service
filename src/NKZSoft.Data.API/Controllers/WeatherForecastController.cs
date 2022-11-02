@@ -1,4 +1,4 @@
-namespace NKZSoft.Data.Service.Controllers;
+namespace NKZSoft.Data.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]

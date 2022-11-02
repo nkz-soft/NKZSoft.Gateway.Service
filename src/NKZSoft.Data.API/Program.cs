@@ -12,6 +12,7 @@ var configuration = builder.Configuration;
 builder.Services.AddControllers();
 builder.Services.AddLogging();
 builder.Services.AddSwagger(configuration, Assembly.GetExecutingAssembly());
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -22,5 +23,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/healthz");
 
 app.Run();

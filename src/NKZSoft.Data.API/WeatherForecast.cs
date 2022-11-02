@@ -1,4 +1,4 @@
-namespace NKZSoft.Data.Service;
+namespace NKZSoft.Data.API;
 
 public class WeatherForecast
 {

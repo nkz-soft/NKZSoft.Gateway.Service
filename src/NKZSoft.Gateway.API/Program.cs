@@ -48,11 +48,15 @@ services.AddAuthorization(options => options.AddPolicy("CookieAuthenticationPoli
     configurePolicy.RequireAuthenticatedUser();
 }));
 
+services.AddHealthChecks();
+
 var app = builder.Build();
 
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHealthChecks("/healthz");
 
 app.UseEndpoints(endpoints =>
 {
