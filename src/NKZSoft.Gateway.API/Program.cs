@@ -40,6 +40,16 @@ services.AddAuthentication(options =>
         options.SaveTokens = true;
         options.GetClaimsFromUserInfoEndpoint = true;
         options.RequireHttpsMetadata = false;
+        options.Events.OnRedirectToIdentityProvider = ctx =>
+        {
+            ctx.ProtocolMessage.RedirectUri = openIdConnectConfiguration.RedirectUrl + "/signin-oidc";
+            return Task.CompletedTask;
+        };
+        options.Events.OnRedirectToIdentityProviderForSignOut = ctx =>
+        {
+            ctx.ProtocolMessage.PostLogoutRedirectUri = openIdConnectConfiguration.RedirectUrl + "/signout-callback-oidc";
+            return Task.CompletedTask;
+        };
     });
 
 services.AddAuthorization(options => options.AddPolicy("CookieAuthenticationPolicy", configurePolicy =>
