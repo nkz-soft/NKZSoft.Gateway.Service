@@ -1,11 +1,9 @@
-version: '3.9'
-
 volumes:
   postgres-data:
 
 services:
   postgres:
-    image: postgres:15
+    image: postgres:17
     container_name: postgres
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -21,36 +19,45 @@ services:
       retries: 15
 
   keycloak:
-    image: quay.io/keycloak/keycloak:legacy
+    image: quay.io/keycloak/keycloak:26.3.1
     container_name: keycloak
+    command:
+      - start-dev
+      - --import-realm
     environment:
-      DB_VENDOR: POSTGRES
-      DB_PORT: 5432
-      DB_ADDR: ${KEYCLOAK_POSTGRES_HOST}
-      DB_DATABASE: ${KEYCLOAK_DATABASE_NAME}
-      DB_SCHEMA: ${KEYCLOAK_DATABASE_SCHEMA_NAME}
-      DB_USER: ${KEYCLOAK_DATABASE_USERNAME}
-      DB_PASSWORD: ${KEYCLOAK_DATABASE_PASSWORD}
-      KEYCLOAK_USER: ${KEYCLOAK_USER}
-      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://${KEYCLOAK_POSTGRES_HOST}:5432/${KEYCLOAK_DATABASE_NAME}
+      KC_DB_USERNAME: ${KEYCLOAK_DATABASE_USERNAME}
+      KC_DB_PASSWORD: ${KEYCLOAK_DATABASE_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_USER}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
+      KC_HTTP_RELATIVE_PATH: /auth
       PROXY_ADDRESS_FORWARDING: "true"
-      KEYCLOAK_IMPORT: "/opt/jboss/keycloak/imports/realm-test.json"
-      KEYCLOAK_FRONTEND_URL: http://localhost:8080/auth
+      KC_HEALTH_ENABLED: "true"
+      KC_HTTP_MANAGEMENT_PORT: "9000"
     volumes:
-      - ./keycloak:/opt/jboss/keycloak/imports
+      - ./keycloak/realm-test.json:/opt/keycloak/data/import/realm-test.json
     ports:
       - 0.0.0.0:8080:8080
+
     healthcheck:
-      test: ["CMD-SHELL", "curl -s -I http://localhost:8080"]
+      test: |
+        bash -c '
+          exec 3<>/dev/tcp/localhost/9000;
+          printf "GET /auth/health/ready HTTP/1.1\r\nHost: localhost:9000\r\nConnection: close\r\n\r\n" >&3;
+          timeout 5s cat <&3 | grep -q "\"status\": \"UP\"" && exit 0 || exit 1
+        '
       interval: 10s
       timeout: 5s
-      retries: 15
+      retries: 3
     depends_on:
       postgres:
         condition: service_healthy
 
   gateway-service:
-    image: ghcr.io/nkz-soft/gateway/gateway-service-api:latest
+    build:
+      context: ../src/NKZSoft.Gateway.API
+      dockerfile: Dockerfile
     container_name: gateway-service
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
@@ -66,7 +73,9 @@ services:
         condition: service_healthy
 
   data-service:
-    image: ghcr.io/nkz-soft/gateway/data-service-api:latest
+    build:
+      context: ../src/NKZSoft.Data.API
+      dockerfile: Dockerfile
     container_name: data-service
     environment:
       ASPNETCORE_ENVIRONMENT: Docker

@@ -780,10 +780,11 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "pHaEdIKaFTOuJvxTFsNezENmPYUpx9yA",
       "redirectUris": [
-        "",
+        "http://localhost:5000/signin-oidc",
         "http://localhost:5000/*",
+        "http://gateway-service/signin-oidc",
         "http://gateway-service/*"
       ],
       "webOrigins": [],
@@ -800,7 +801,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "client.secret.creation.time": "1667137639",
-        "post.logout.redirect.uris": "http://localhost:5000/*##http://gateway-service/*",
+        "post.logout.redirect.uris": "http://localhost:5000/signout-callback-oidc##http://localhost:5000/*##http://gateway-service/signout-callback-oidc##http://gateway-service/*",
         "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.revoke.offline.tokens": "false",
         "use.refresh.tokens": "true",
@@ -872,50 +873,7 @@
         "phone",
         "offline_access",
         "microprofile-jwt"
-      ],
-      "authorizationSettings": {
-        "allowRemoteResourceManagement": true,
-        "policyEnforcementMode": "ENFORCING",
-        "resources": [
-          {
-            "name": "Default Resource",
-            "type": "urn:yarn-proxy:resources:default",
-            "ownerManagedAccess": false,
-            "attributes": {},
-            "_id": "a45c561b-f57c-47cf-a0e7-3523f58e4475",
-            "uris": [
-              "/*"
-            ]
-          }
-        ],
-        "policies": [
-          {
-            "id": "b3ccb750-347d-48f4-8cca-53f207702a80",
-            "name": "Default Policy",
-            "description": "A policy that grants access only for users within this realm",
-            "type": "js",
-            "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
-            "config": {
-              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
-            }
-          },
-          {
-            "id": "a61c624e-6b84-4115-8851-fa6d5cdbf8e7",
-            "name": "Default Permission",
-            "description": "A permission that applies to the default resource type",
-            "type": "resource",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "defaultResourceType": "urn:yarn-proxy:resources:default",
-              "applyPolicies": "[\"Default Policy\"]"
-            }
-          }
-        ],
-        "scopes": [],
-        "decisionStrategy": "UNANIMOUS"
-      }
+      ]
     }
   ],
   "clientScopes": [
